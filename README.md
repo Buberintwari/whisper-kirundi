@@ -8,6 +8,16 @@ Ce projet fine-tune le modèle `openai/whisper-small` pour transcrire des fichie
 - Fine-tuning du modèle
 - Interface utilisateur avec Gradio
 
+## 🎧 Données audio
+
+- 🔗 Audios originaux (mono) : [📁 audio/ sur Google Drive](https://drive.google.com/drive/folders/18DqujcI_po8jSruNBdL_xCLRBHVlyhmt?usp=sharing)
+- 🔗 Audios rééchantillonnés (16kHz) : [📁 audio_16k/ sur Google Drive](https://drive.google.com/drive/folders/18hho5j58MGRQZoPmKcpjk8I6QGhAZewi?usp=sharing)
+
+## 🤖 Modèle fine-tuné
+
+- 📦 Hugging Face : [`whisper-kirundi-finetuned`](https://huggingface.co/Buberintwari/whisper-kirundi-finetuned)
+
+
 ## Lancer le projet
 
 ```bash
