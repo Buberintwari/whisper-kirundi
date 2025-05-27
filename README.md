@@ -1,5 +1,5 @@
 # whisper-kirundi
-Transcrivez automatiquement un chiffre en Kirundi à partir de votre voix
+Transcrivez automatiquement un chiffre en Kirundi (langue nationale du Burundi) à partir de votre voix
 
 Ce projet fine-tune le modèle `openai/whisper-small` pour transcrire des fichiers audio contenant les nombres de 1 à 10 en kirundi. Il inclut :
 
