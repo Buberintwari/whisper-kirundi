@@ -1,8 +1,5 @@
 # app.py
-
-# ========================================
 # 1. Importation des librairies
-# ========================================
 import os
 import torch
 import torchaudio
@@ -16,9 +13,7 @@ from transformers import (
 )
 import gradio as gr
 
-# ========================================
 # 2. Préparation des fichiers audio
-# ========================================
 # Rééchantillonnage de tous les fichiers audio vers 16kHz
 def resample_audio_to_16k(input_path, output_path):
     waveform, original_sr = torchaudio.load(input_path)
@@ -33,9 +28,8 @@ for i in range(1, 11):
     out_path = f"audio_16k/{i}.wav"
     resample_audio_to_16k(in_path, out_path)
 
-# ========================================
 # 3. Création du dataset Hugging Face
-# ========================================
+
 kirundi_numbers = ["rimwe", "kabiri", "gatatu", "kane", "gatanu",
                    "gatandatu", "indwi", "umunani", "icenda", "icumi"]
 
@@ -44,9 +38,9 @@ data = [{"audio": f"audio_16k/{i}.wav", "text": kirundi}
 
 dataset = Dataset.from_list(data).cast_column("audio", Audio())
 
-# ========================================
+
 # 4. Prétraitement avec WhisperProcessor
-# ========================================
+
 model_name = "openai/whisper-small"
 processor = WhisperProcessor.from_pretrained(model_name)
 model = WhisperForConditionalGeneration.from_pretrained(model_name)
@@ -67,9 +61,8 @@ def make_train_features(batch):
 
 prepared_dataset = dataset.map(make_train_features, remove_columns=["audio", "text"])
 
-# ========================================
 # 5. Configuration de l'entraînement
-# ========================================
+
 training_args = TrainingArguments(
     output_dir="./whisper-kirundi",
     per_device_train_batch_size=1,
@@ -89,20 +82,16 @@ trainer = Trainer(
     tokenizer=processor.feature_extractor  # ou processor.tokenizer
 )
 
-# ========================================
 # 6. Entraînement du modèle
-# ========================================
+
 trainer.train()
 
-# ========================================
 # 7. Sauvegarde du modèle fine-tuné
-# ========================================
+
 model.save_pretrained("./whisper-kirundi-finetuned")
 processor.save_pretrained("./whisper-kirundi-finetuned")
 
-# ========================================
 #  8. Transcription d'un audio avec modèle fine-tuné
-# ========================================
 # Recharger le modèle entraîné
 model = WhisperForConditionalGeneration.from_pretrained("./whisper-kirundi-finetuned")
 processor = WhisperProcessor.from_pretrained("./whisper-kirundi-finetuned")
@@ -117,9 +106,7 @@ def transcribe(audio_path):
         transcription = processor.batch_decode(predicted_ids, skip_special_tokens=True)[0]
     return transcription
 
-# ========================================
 # 9. Interface Gradio pour tester
-# ========================================
 gr.Interface(
     fn=transcribe,
     inputs=gr.Audio(type="filepath", label="Téléversez un fichier audio (16kHz, mono)"),
